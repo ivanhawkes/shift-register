@@ -35,7 +35,7 @@ int main(void) {
 
   // Set the initial state.
   gpio_put(kLatchPin, 1);
-  gpio_put(kClockPin, 1);
+  gpio_put(kClockPin, 0);
   sleep_us(1);
 
   while (true) {
@@ -65,9 +65,9 @@ int main(void) {
 
     // Slow it all down and give me a chance to read the output.
     gpio_put(kLEDPin, 1);
-    sleep_us(10000);
+    sleep_ms(100);
     gpio_put(kLEDPin, 0);
-    sleep_us(10000);
+    sleep_ms(100);
   }
 
   return 0;
