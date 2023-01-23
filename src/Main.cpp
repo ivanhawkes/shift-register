@@ -10,7 +10,8 @@ int main(void) {
   const uint kLEDPin = PICO_DEFAULT_LED_PIN;
   const uint kLatchPin = 2;
   const uint kClockPin = 3;
-  const uint kDataPin = 4;
+  const uint kData01Pin = 4;
+  const uint kData02Pin = 5;
 
   // Init the USB / UART IO.
   stdio_init_all();
@@ -30,8 +31,10 @@ int main(void) {
   gpio_set_dir(kLatchPin, GPIO_OUT);
   gpio_init(kClockPin);
   gpio_set_dir(kClockPin, GPIO_OUT);
-  gpio_init(kDataPin);
-  gpio_set_dir(kDataPin, GPIO_IN);
+  gpio_init(kData01Pin);
+  gpio_set_dir(kData01Pin, GPIO_IN);
+  gpio_init(kData02Pin);
+  gpio_set_dir(kData02Pin, GPIO_IN);
 
   // Set the initial state.
   gpio_put(kLatchPin, 1);
@@ -39,20 +42,25 @@ int main(void) {
   sleep_us(1);
 
   while (true) {
+    uint8_t data01{0};
+    uint8_t data02{0};
+
     // Sample the pins.
     gpio_put(kLatchPin, 0);
     sleep_us(1);
     gpio_put(kLatchPin, 1);
     sleep_us(1);
 
-    printf("Bits: ");
     for (int i = 0; i < 8; i++) {
       // Read each bit in.
-      bool q = gpio_get(kDataPin);
-      if (q)
-        printf("1");
-      else
-        printf("0");
+      bool q1 = gpio_get(kData01Pin);
+      data01 = data01 << 1;
+      data01 += q1 ? 1 : 0;
+
+      bool q2 = gpio_get(kData02Pin);
+      data02 = data02 << 1;
+      data02 += q2 ? 1 : 0;
+
       sleep_us(1);
 
       // Tick tock.
@@ -61,7 +69,7 @@ int main(void) {
       gpio_put(kClockPin, 0);
       sleep_us(1);
     }
-    printf("\n");
+    printf("Data 01: %0XH    Data 02: %0XH\n", data01, data02);
 
     // Slow it all down and give me a chance to read the output.
     gpio_put(kLEDPin, 1);
