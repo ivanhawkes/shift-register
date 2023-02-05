@@ -7,7 +7,9 @@ Wiring requirements.
 
 * GPIO 02     Latch
 * GPIO 03     Clock
-* GPIO 04     Data 01
-* GPIO 05     Data 02
+* GPIO 04     Data 01   (QH on Shift Register 1)
+* GPIO 05     Data 02   (QH on Shift Register 1)
+* GPIO 06     Data 03   (QH on Shift Register 1)
+* GPIO 07     Data 04   (QH on Shift Register 1)
 
 Ensure the CLK_INH pin is tied to ground. SER should also be grounded, though this should not affect the tests.
