@@ -8,12 +8,18 @@
 
 int main(void) {
   const uint kLEDPin = PICO_DEFAULT_LED_PIN;
-  const uint kLatchPin = 2;
-  const uint kClockPin = 3;
-  const uint kData01Pin = 4;
-  const uint kData02Pin = 5;
-  const uint kData03Pin = 6;
-  const uint kData04Pin = 7;
+  // const uint kLatchPin = 2;
+  // const uint kClockPin = 3;
+  // const uint kData01Pin = 4;
+  // const uint kData02Pin = 5;
+  // const uint kData03Pin = 6;
+  // const uint kData04Pin = 7;
+  const uint kLatchPin = 27;
+  const uint kClockPin = 28;
+  const uint kData01Pin = 2;
+  const uint kData02Pin = 3;
+  const uint kData03Pin = 4;
+  const uint kData04Pin = 5;
 
   // Init the USB / UART IO.
   stdio_init_all();
@@ -31,14 +37,19 @@ int main(void) {
   // Set the pins.
   gpio_init(kLatchPin);
   gpio_set_dir(kLatchPin, GPIO_OUT);
+
   gpio_init(kClockPin);
   gpio_set_dir(kClockPin, GPIO_OUT);
+
   gpio_init(kData01Pin);
   gpio_set_dir(kData01Pin, GPIO_IN);
+
   gpio_init(kData02Pin);
   gpio_set_dir(kData02Pin, GPIO_IN);
+
   gpio_init(kData03Pin);
   gpio_set_dir(kData03Pin, GPIO_IN);
+
   gpio_init(kData04Pin);
   gpio_set_dir(kData04Pin, GPIO_IN);
 
@@ -89,8 +100,19 @@ int main(void) {
       sleep_us(1);
     }
 
-    printf("Data 01: %0XH    Data 02: %0XH    Data 03: %0XH    Data 04: %0XH\n",
-           data01, data02, data03, data04);
+    // Get the results in binary.
+    char buffer01[10];
+    char buffer02[10];
+    char buffer03[10];
+    char buffer04[10];
+    itoa(data01, buffer01, 2);
+    itoa(data02, buffer02, 2);
+    itoa(data03, buffer03, 2);
+    itoa(data04, buffer04, 2);
+
+    printf("01: 0x%0X %s    02: 0x%0X %s    03: 0x%0X %s    04: 0x%0X %s\n",
+           data01, buffer01, data02, buffer02, data03, buffer03, data04,
+           buffer04);
 
     // Slow it all down and give me a chance to read the output.
     gpio_put(kLEDPin, 1);
